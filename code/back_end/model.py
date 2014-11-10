@@ -6,10 +6,10 @@ import cPickle as cp
 
 class Model():
     
-    def __init__(self, method='item_similarity_recommender', item_normal=True, model=None):
+    def __init__(self, method='ranking_factorization_recommender', item_normal=True, model=None):
         '''
-        INPUT: None
-        DESCRIPTION: 
+        INPUT: String, boolean, boolean
+        DESCRIPTION: Gets the business data and review data into SFrames and saves them
         OUTPUT: None
         '''
         self.method = method
@@ -24,27 +24,27 @@ class Model():
         
     def get_businesses(self, bus_file="businesses.pickle"):
         '''
-        INPUT: None
-        DESCRIPTION: 
-        OUTPUT: None
+        INPUT: String
+        DESCRIPTION: Loads and gets the business data
+        OUTPUT: SFrame
         '''
         businesses = gl.load_sframe("businesses")
         return businesses
     
     def get_reviews(self, rev_file="reviews.pickle"):
         '''
-        INPUT: None
-        DESCRIPTION: 
-        OUTPUT: None
+        INPUT: String
+        DESCRIPTION: Loads and gets the review data
+        OUTPUT: SFrame
         '''
         reviews = gl.load_sframe("reviews")
         return reviews
     
     def build(self, method, item_normal=False):
         '''
-        INPUT: None
-        DESCRIPTION: 
-        OUTPUT: None
+        INPUT: String, boolean
+        DESCRIPTION: Returns the model chosen by the String of method
+        OUTPUT: Model
         '''
         if item_normal:
             self.reviews = normalize_ratings(self.reviews, 'business_id')
@@ -86,8 +86,8 @@ class Model():
     def sample_recommendation(self, number_of_users, rec_list_size):
         '''
         INPUT: int, int
-        DESCRIPTION: 
-        OUTPUT: None
+        DESCRIPTION: Tests the recommendation of the models
+        OUTPUT: DataFrame
         '''
         #get list of user_id samples
         percent_sample = (number_of_users+0.0)/self.reviews.shape[0]
@@ -107,10 +107,11 @@ class Model():
             dict_of_dict[user_row['user_id']] = user_dict
         return pd.DataFrame(dict_of_dict)
 
-    def save(self, filepath='model'):
+    def save(self, file_name='model'):
         '''
         INPUT: int, int
-        DESCRIPTION: 
+        DESCRIPTION: Saves the model into a model filepath
         OUTPUT: None
         '''
-        return self.model.save(filepath)
+        filepath = '../../data/'
+        return self.model.save(filepath+file_name)

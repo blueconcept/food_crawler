@@ -1,5 +1,3 @@
-from mongotopandas import MongoToPython
-
 class Entity(object):
     '''
     Encapsulates a general 'business' class
@@ -63,3 +61,50 @@ class Business(Entity):
         OUTPUT: String, String, String, String
         '''
         return self.stars, self.review_count, self.city, self.name
+
+class Group(Entity):
+    '''
+    Encapsulates the Group attributes and inherits from Entity
+    '''
+    
+    def __init__(self, mongo_doc):
+        '''
+        INPUT: MongoToPython
+        DESCRIPTION: Initializes Group and assigns various attributes
+        OUTPUT: None
+        '''
+        Entity.__init__(self, mongo_doc)
+        self.group_id = mongo_doc['group_id']
+        self.leader_id = mongo_doc['leader_id']
+        self.members = mongo_doc['members']
+
+class Invitation():
+    '''
+    Encapsulates the Group attributes and inherits from Entity
+    '''
+    
+    def __init__(self, mongo_doc):
+        '''
+        INPUT: MongoToPython
+        DESCRIPTION: Initializes Invitation and assigns various attributes
+        OUTPUT: None
+        '''
+        self.invitation_id = mongo_doc['invitation_id']
+        self.inviter_id = mongo_doc['inviter_id']
+        self.invited_id = mongo_doc['invited_id']
+
+class Review():
+    '''
+    Encapsulates the Review attributes and inherits from Entity
+    '''
+    
+    def __init__(self, mongo_doc):
+        '''
+        INPUT: MongoToPython
+        DESCRIPTION: Initializes Review and assigns various attributes
+        OUTPUT: None
+        '''
+        self.review_id = mongo_doc['review_id']
+        self.user_id = mongo_doc['user_id']
+        self.business_id = mongo_doc['business_id']
+        self.stars = mongo_doc['stars']

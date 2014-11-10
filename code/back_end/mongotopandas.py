@@ -102,10 +102,18 @@ class MongoToPython():
     def replace(self, collection_name, replacing_key_values ,key_id , value_id):
         '''
         INPUT: String, Dictionary, String, String
-        DESCRIPTION: Inserts a document into a given collection
+        DESCRIPTION: Replaces the values of a document into a given collection
         OUTPUT: None
         '''
         self.db[collection_name].update({key_id:value_id}, replacing_key_values , upsert=False)
+
+    def count(self, collection_name):
+        '''
+        INPUT: String, Dictionary, String, String
+        DESCRIPTION: Inserts a document into a given collection
+        OUTPUT: None
+        '''
+        return self.db[collection_name].count()
 
     def summary(self):
         '''
@@ -114,5 +122,6 @@ class MongoToPython():
         OUTPUT: None
         '''
         collection_names = self.db.collection_names
+        pass
 
 

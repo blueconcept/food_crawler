@@ -1,40 +1,23 @@
+import graphlab as gl
+
 class FilterSort():
     '''
+    Stores the recommender_sf to be filtered and changed into objects for the front end
     '''
     
-    def __init__(self, recommender_list):
+    def __init__(self, recommender_sf):
         '''
-        INPUT: None
+        INPUT: SFrame
         DESCRIPTION: 
         OUTPUT: None
         '''
-        self.orignal_list = recommender_list
-        #booleans
+        self.recommender_sf = recommender_sf
+        self.booleans = {}
     
-    def get_cleaned_list(self, top_n_items=10):
+    def get_filtered_list(self, top_n_items=10):
         '''
         INPUT: None
         DESCRIPTION: 
         OUTPUT: None
         '''
-        
-        def filter_by(self, rec_list):
-            '''
-            INPUT: None
-            DESCRIPTION: 
-            OUTPUT: None
-            '''
-            pass
-        
-        def sort_by(self, rec_list):
-            '''
-            INPUT: None
-            DESCRIPTION: 
-            OUTPUT: None
-            '''
-            pass
-        #sort first 
-        
-        #then filter
-        
-        #return top_n_items
+        pass
