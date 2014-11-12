@@ -1,5 +1,9 @@
+from model import Model
+from mongointerface import MongoInterface
 import pandas as pd 
 import graphlab as gl
+
+fp = '../../data/'
 
 def save_cleaned_data():
     '''
@@ -10,9 +14,8 @@ def save_cleaned_data():
     df = get_business_data_cleaned()
     df['business_id'] = df.index
     mongo = MongoInterface()
-    gl.SFrame(mongo.reviews()).save("reviews")
-    gl.SFrame(df).save("businesses")
-    
+    gl.SFrame(mongo.reviews()).save(fp+"reviews")
+    gl.SFrame(df).save(fp+"businesses")
     
 def making_models(list_methods = ['item_similarity_recommender', 'factorization_recommender', 
                     'ranking_factorization_recommender']):
@@ -29,14 +32,14 @@ def making_models(list_methods = ['item_similarity_recommender', 'factorization_
         
 def test_models():
     '''
-        INPUT: None
-        DESCRIPTION: 
-        OUTPUT: None
-        '''
+    INPUT: None
+    DESCRIPTION: 
+    OUTPUT: None
+    '''
     list_methods = ['factorization_recommender', 'factorization_recommender',
                     'ranking_factorization_recommender']
-    model = Model(model=gl.load_model('item_similarity_recommender'))
+    model = Model(model=gl.load_model(fp+'item_similarity_recommender'))
     print model.sample_recommendation(20, 10)
     for model_name in list_methods:
-        model.model = gl.load_model(model_name)
+        model.model = gl.load_model(model_name) 
         print model.sample_recommendation(20,10)

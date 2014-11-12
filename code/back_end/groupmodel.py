@@ -1,4 +1,4 @@
-import graphlab
+import graphlab as gl
 import sys
 
 class GroupModel():
@@ -44,7 +44,7 @@ class GroupModel():
         DESCRIPTION: Gets the bohr score for each resturant sum by each individual's bohr score
         OUTPUT: SFrame
         '''
-        return self.grouped.sort(['Bohrs'], ascending=True)[['business_id', 'Bohrs']]
+        return self.grouped.sort(['Bohrs'], ascending=True)[['business_id', 'Bohrs', 'score']]
     
     # def footmen_rule(self):
     #     '''

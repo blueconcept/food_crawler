@@ -1,4 +1,5 @@
 import graphlab as gl
+from recommendation import Recommendation
 
 class Recommender():
     '''

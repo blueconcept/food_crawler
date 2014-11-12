@@ -1,8 +1,10 @@
+from mongointerface import MongoInterface
 import graphlab as gl
 import random
 import pandas as pd
 import pickle
 import cPickle as cp
+from business import Business
 
 class Model():
     
@@ -14,11 +16,10 @@ class Model():
         '''
         self.method = method
         self.mongo_interface = MongoInterface()
-        self.businesses = gl.load_sframe("businesses")
-        self.reviews = gl.load_sframe("reviews")
+        self.reviews = gl.load_sframe("../../data/reviews")
         
         if model == None:
-            self.model = self.build(method, item_normal)
+            self.model = self.build(method, item_normal=item_normal)
         else:
             self.model = model
         
@@ -47,16 +48,16 @@ class Model():
         OUTPUT: Model
         '''
         if item_normal:
-            self.reviews = normalize_ratings(self.reviews, 'business_id')
+            self.reviews = self.normalize_ratings(self.reviews, 'business_id')
         #Could use a dictionary but might be buggier
         if method == "item_similarity_recommender":
-            return gl.recommender.item_similarity_recommender.create(self.reviews, item_id="business_id", target="stars", item_data=self.businesses)
+            return gl.recommender.item_similarity_recommender.create(self.reviews, item_id="business_id", target="stars")
         if method == "factorization_recommender":
-            return gl.recommender.factorization_recommender.create(self.reviews, item_id="business_id", target="stars", item_data=self.businesses)
+            return gl.recommender.factorization_recommender.create(self.reviews, item_id="business_id", target="stars")
         if method == "ranking_factorization_recommender":
-            return gl.recommender.ranking_factorization_recommender.create(self.reviews, item_id="business_id", target="stars", item_data=self.businesses)
+            return gl.recommender.ranking_factorization_recommender.create(self.reviews, item_id="business_id", target="stars")
         if method == "popularity_recommender":
-            return gl.recommender.popularity_recommender.create(self.reviews, item_id="business_id", target="stars", item_data=self.businesses)
+            return gl.recommender.popularity_recommender.create(self.reviews, item_id="business_id", target="stars")
         raise LookupError("Build Error: not one of the models for recommenders")
     
     def normalize(self, value, average):

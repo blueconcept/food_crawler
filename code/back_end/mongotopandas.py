@@ -105,7 +105,7 @@ class MongoToPython():
         DESCRIPTION: Replaces the values of a document into a given collection
         OUTPUT: None
         '''
-        self.db[collection_name].update({key_id:value_id}, replacing_key_values , upsert=False)
+        self.db[collection_name].update({key_id:value_id}, replacing_key_values)
 
     def count(self, collection_name):
         '''
