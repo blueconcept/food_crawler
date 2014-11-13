@@ -41,6 +41,11 @@
 	    font-size: 30px;
   	}
 
+  	#categories {
+  		font-size: 17px;
+  		color: blue;
+  	}
+
 	</style>
 </head>
 <body>
@@ -61,7 +66,7 @@
           <li class="nav-list-item"><a href="#">Invites</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="nav-list-item"><a href="#">Log Out</a></li>
+          <li class="nav-list-item"><a href="/">Log Out</a></li>
         </ul>
       </div>
     </div>
@@ -78,9 +83,9 @@
 
 		{% for bus in businesses %}
 		  <a href={{ bus.yelp}} class="list-group-item">
-		    <h4 class="list-group-item-heading">{{bus.name}} - Rated at {{bus.stars}} Stars</h4>
+		    <h4 class="list-group-item-heading">{{bus.name}}, {{bus.stars}} Stars</h4>
 		    <p class="list-group-item-text">{{ bus.address}}</p>
-		    <p class="list-group-item-text">{{', '.join(bus.categories)}}</p>
+		    <p class="list-group-item-text" id='categories'>{{', '.join(bus.categories)}}</p>
 
 		  </a>
 		{% endfor %}

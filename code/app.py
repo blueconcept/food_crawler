@@ -3,6 +3,7 @@ from back_end.mongointerface import MongoInterface
 from flask.ext.wtf import Form
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import Required
+from back_end.filtersort import BusinessFilter
 import graphlab as gl
 
 app = Flask(__name__)
@@ -37,31 +38,30 @@ def dashboard():
 	'''
 	category= 'Restaurants'
 	user_id = session['user_id']
-	sf = model.recommend(users=[user_id], k=300)
-	business_list = []
-	k = 19
-	i = 0
-	for bus_id in sf['business_id']:
-		bus = mango.get_business(bus_id)
-		if category in bus.categories:
-			business_list.append(bus)
-			if i == k:
-				break
-			else:
-				i += 1
-
+	sf = model.recommend(users=[user_id], k=500)
+	bus_filter = BusinessFilter(sf['business_id'], mango)
+	business_list = bus_filter.get_filtered_list()
 	return render_template('dashboard.html', recommendations=sf, businesses=business_list)
 
 @app.route('/friends', methods=['GET', 'POST'])
 def friends():
+	'''
+	Page for Friends
+	'''
 	return render_template('friends.html')
 
 @app.route('/groups', methods=['GET', 'POST'])
 def groups():
+	'''
+	Page for Groups
+	'''
 	return render_template('groups.html')
 
 @app.route('/reviews', methods=['GET', 'POST'])
 def reviews():
+	'''
+	Page for Friends
+	'''
 	return render_template('reviews.html')
 
 
