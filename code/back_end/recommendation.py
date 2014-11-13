@@ -38,7 +38,7 @@ class Recommendation():
         '''
         INPUT: List
         DESCRIPTION: Evaluates the RMSE between the users and the group Recommendation, expect a list between 2-6
-        OUTPUT: None
+        OUTPUT: float, float
         '''
         user_count = len(self.user_id_list)
         individual_predictions = self.individual_prediction()

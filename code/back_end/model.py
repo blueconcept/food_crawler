@@ -22,24 +22,6 @@ class Model():
             self.model = self.build(method, item_normal=item_normal)
         else:
             self.model = model
-        
-    def get_businesses(self, bus_file="businesses.pickle"):
-        '''
-        INPUT: String
-        DESCRIPTION: Loads and gets the business data
-        OUTPUT: SFrame
-        '''
-        businesses = gl.load_sframe("businesses")
-        return businesses
-    
-    def get_reviews(self, rev_file="reviews.pickle"):
-        '''
-        INPUT: String
-        DESCRIPTION: Loads and gets the review data
-        OUTPUT: SFrame
-        '''
-        reviews = gl.load_sframe("reviews")
-        return reviews
     
     def build(self, method, item_normal=False):
         '''
@@ -51,7 +33,7 @@ class Model():
             self.reviews = self.normalize_ratings(self.reviews, 'business_id')
         #Could use a dictionary but might be buggier
         if method == "item_similarity_recommender":
-            return gl.recommender.item_similarity_recommender.create(self.reviews, item_id="business_id", target="stars")
+            return gl.recommender.item_similarity_recommender.create(self.reviews, ite , item_id="business_id", target="stars")
         if method == "factorization_recommender":
             return gl.recommender.factorization_recommender.create(self.reviews, item_id="business_id", target="stars")
         if method == "ranking_factorization_recommender":

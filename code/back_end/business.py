@@ -21,6 +21,11 @@ class Business():
         self.yelp = self.yelp_url()
 
     def yelp_url(self):
+        '''
+        INPUT: None
+        DESCRIPTION: Generates the url for yelp
+        OUTPUT: String
+        '''
         yelp = "http://www.yelp.com/biz/"
         def add_dashes(string):
             return string.replace("@","at").replace("&", 'and').replace(" ", '-').replace("'",'')

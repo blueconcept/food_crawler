@@ -50,7 +50,7 @@ def get_business_data_cleaned(mongo):
     '''
     INPUT: MongoToPython
     DESCRIPTION: Initializes methods, gets all reviews, prints the summary of the individual recommendations.
-    OUTPUT: None
+    OUTPUT: DataFrame
     '''
     i = 0
     dic_of_dict = {}
@@ -60,5 +60,5 @@ def get_business_data_cleaned(mongo):
         bus_ids.append(doc['business_id'])
         i += 1
     df = pd.DataFrame(dic_of_dict).T
-    df = df.set_index(pd.Series(bus_ids))
+    df['business_id'] = pd.Series(bus_ids)
     return cleaned_df(df)

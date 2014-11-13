@@ -12,10 +12,6 @@ class GroupModel():
         DESCRIPTION: Initializes the grouped SFrame 
         OUTPUT: None
         '''
-        
-        #
-        # TODO: Take the new_users_list and append their recommendations to recommend_df
-        #  
 
         self.model = model
         recommend_df = model.recommend(users=users, k=sys.maxint)
@@ -45,11 +41,3 @@ class GroupModel():
         OUTPUT: SFrame
         '''
         return self.grouped.sort(['Bohrs'], ascending=True)[['business_id', 'Bohrs', 'score']]
-    
-    # def footmen_rule(self):
-    #     '''
-    #     INPUT: None
-    #     DESCRIPTION: 
-    #     OUTPUT: SFrame
-    #     '''
-    #     pass (use footmen_rule distance comparision)

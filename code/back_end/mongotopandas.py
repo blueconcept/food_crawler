@@ -115,13 +115,4 @@ class MongoToPython():
         '''
         return self.db[collection_name].count()
 
-    def summary(self):
-        '''
-        INPUT: None
-        DESCRIPTION: Returns the item count of each collection in this database
-        OUTPUT: None
-        '''
-        collection_names = self.db.collection_names
-        pass
-
 
