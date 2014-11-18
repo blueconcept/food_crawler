@@ -14,17 +14,19 @@ class GroupModel():
         '''
 
         self.model = model
-        recommend_df = model.recommend(users=users, k=sys.maxint)
-        self.grouped = recommend_df.groupby('business_id', {'Average':gl.aggregate.AVG('score'), 
-            'LeastMisery':gl.aggregate.MIN('score'), 'Bohrs':gl.aggregate.SUM('rank')})
+        if users is None:
+            raise TypeError("Users are not defined")
+        recommend_df = model.recommend(users=users, k=500)
+
+        self.grouped = recommend_df.groupby('business_id', {'Average':gl.aggregate.SUM('score')})
         
-    def least_misery(self):
-        '''
-        INPUT: None
-        DESCRIPTION: Gets the minimum score for each resturant given by each individual
-        OUTPUT: SFrame
-        '''
-        return self.grouped.sort(['LeastMisery'], ascending=False)[['business_id', 'LeastMisery']]
+    # def least_misery(self):
+    #     '''
+    #     INPUT: None
+    #     DESCRIPTION: Gets the minimum score for each resturant given by each individual
+    #     OUTPUT: SFrame
+    #     '''
+    #     return self.grouped.sort(['LeastMisery'], ascending=False)[['business_id', 'LeastMisery']]
     
     def average_score(self):
         '''
@@ -34,10 +36,10 @@ class GroupModel():
         '''
         return self.grouped.sort(['Average'], ascending=False)[['business_id', 'Average']]
     
-    def bohrs(self):
-        '''
-        INPUT: None
-        DESCRIPTION: Gets the bohr score for each resturant sum by each individual's bohr score
-        OUTPUT: SFrame
-        '''
-        return self.grouped.sort(['Bohrs'], ascending=True)[['business_id', 'Bohrs', 'score']]
+    # def bohrs(self):
+    #     '''
+    #     INPUT: None
+    #     DESCRIPTION: Gets the bohr score for each resturant sum by each individual's bohr score
+    #     OUTPUT: SFrame
+    #     '''
+    #     return self.grouped.sort(['Bohrs'], ascending=True)[['business_id', 'Bohrs', 'score']]

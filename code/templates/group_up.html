@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+  <script>window.jQuery || document.write('<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+
+  <script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
+</script>
+
+  <style>
+
+  @import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
+  @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+  
+  .list-group {
+    margin: 1%;
+  }
+
+  .Logo {
+    color: purple;
+    font-size: 140%;
+  }
+
+  .span-div{
+    margin-left:  33%;
+  }
+
+  li{
+    font-size: 140%;
+  }
+
+  .header div{
+    float: left;
+    color: #fff;
+    font-family: 'Exo', sans-serif; 
+    font-size: 35px;
+    font-weight: 200;
+  }
+
+  .header div span{
+    color: #5379fa !important;
+  }
+
+  .nav-list-item a{
+    font-family: 'Exo', sans-serif;
+    font-size: 30px;
+  }
+
+  #lead_group{
+    margin: 1%;
+    float: left;
+    width: 48%;
+  }
+
+  #member_group{
+    margin: 1%;
+    float: right;
+    width: 48%;
+  }
+
+  .button-collection{
+    margin-left: 1%;
+  }
+
+  .input-group{
+    margin-left: 1%;
+    width: 50%;
+  }
+
+  #group_text {
+    float: left;
+    width: 50%;
+    margin-right: 1%;
+  }
+
+  #recommendations{
+  	float: left;
+  	margin-right: 47;
+  }
+
+  #friends {
+  	margin: 1%;
+  	float: left;
+    width: 300px;
+
+  }
+
+  #recommendations {
+  	margin: 1%;
+  }
+
+  #disband_group {
+  	margin-left: 1%;
+
+  }
+
+  .panel panel-info {
+    margin-left: 50%;
+  }
+
+  td{
+    float: center;
+  }
+
+</style>
+
+</head>
+<body>
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/dashboard">
+          <div class="header">
+      <div>Food<span>Crawler</span></div>
+    </div>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="nav-list-item"><a href="groups">Groups</a></li>
+          <li class="nav-list-item"><a href="friends">Friends</a></li>
+          <li class="nav-list-item"><a href="reviews">Reviews</a></li>
+
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_friends">
+        <div class="form-group">
+        <input name="friend-query" type="text" class="form-control" placeholder="Find Friends">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_businesses">
+        <div class="form-group">
+        <input name="business-query" type="text" class="form-control" placeholder="Find Businesses">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+   
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="nav-list-item"><a href="/">Log Out</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+  </nav>
+
+  	<form method="post" action="/disband">
+		<button name="disband" class="btn btn-danger" id="disband_group" value="{{ group.group_id }}">Disband Group</button>
+	</form>
+
+ 	<div class="panel panel-primary" id="recommendations">
+	  <div class="panel-heading">
+	    Top Recommended Group Restaurants</h4>
+	  </div>
+
+		{% for bus in group_businesses %}
+		  <a href={{ bus.yelp}} class="list-group-item">
+		    <h4 class="list-group-item-heading">{{bus.name}}, {{bus.stars}} Stars</h4>
+		    <p class="list-group-item-text">{{ bus.address}}</p>
+		    <p class="list-group-item-text" id='categories'>{{', '.join(bus.categories)}}</p>
+		  </a>
+		{% endfor %}
+	</div>
+
+	<div class="panel panel-primary" id="friends" >
+	  <div class="panel-heading">Group Panel</div>
+	  	<table class="table">
+	    {% for member in members %}
+	    <tr>
+	    	<td id={{ "name"+member.user_id}}>
+	    		{{ member.name }}
+	    	</td>
+	    	<td>
+	    		<button id={{ member.user_id}}  value={{ member.user_id}} class="btn btn-danger">Remove Member</button>
+	    		<script type=text/javascript>
+					$(function() {
+						$("{{ '#'+member.user_id}}" ).bind('click', function() {
+							group_id = "{{ group.group_id }}";
+							$.getJSON($SCRIPT_ROOT + "/remove_from_group", {
+								removed: $(this).val(),
+								group_id: group_id
+							}, function(data) {
+								$("#"+data.removing_member).remove()
+								$("#name"+data.removing_member).remove()
+							});
+						});
+					});
+  				</script>
+	    	</td>
+	    </tr>
+	    {% endfor %}
+		</table>
+	  
+	  </div>
+
+	  <div class="panel panel-primary" id="friends" name="invites">
+	  	<div class="panel-heading">Pending Invites</div>
+	    <table class="table" id="pending">
+    		{% for user in invited %}
+    			<tr>
+    		    <td>
+    		    {{  user.name }}
+    			</td>
+    			</tr>
+    		{% endfor %}
+    		</table>
+    	</div>
+
+	<div class="panel panel-primary" id="friends" name="friends">
+	  	<div class="panel-heading">Friends</div>
+
+		    	<table class="table" id="rest-of-friends">
+				{% for friend in rest_of_friends %}
+					<tr>
+						<td id={{ friend.name +friend.user_id}}>
+							{{ friend.name }}
+						</td>
+						<td>
+							<button id={{ friend.user_id }} value={{ friend.user_id }} class="btn btn-info">Invite Friend</button>
+						</td>
+					</tr>
+					 <script type=text/javascript>
+            $(function() {
+              $("{{'#'+friend.user_id}}").bind('click', function() {
+                group_id = "{{ group.group_id }}"
+                $.getJSON($SCRIPT_ROOT + "/invite_group", {
+                  invited: $(this).val(),
+                  group_id: group_id
+                }, function(data) {
+                  $("#"+data.invited_id).remove();
+                  $("#"+data.name+data.invited_id).remove();
+                  $("#pending").append("<tr><td>"+data.name+"</td><tr>");
+                });
+              });
+            });
+            </script>
+			  		{% endfor %}
+				  	</table>
+			</div>		
+	  	</div>
+	</div>
+
+
+</body>

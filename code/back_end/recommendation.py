@@ -14,6 +14,8 @@ class Recommendation():
         OUTPUT: None
         '''
         self.model = model
+        if user_id_list is None:
+            raise TypeError('Recommendation')
         self.user_id_list = user_id_list
         self.groupmodel = self.group_predictions()
         
@@ -32,6 +34,8 @@ class Recommendation():
         DESCRIPTION: Creates a groupmodel based on the user_id_list
         OUTPUT: GroupModel
         '''
+        if self.user_id_list is None:
+            raise TypeError('group_predictions')
         return GroupModel(self.model, self.user_id_list)
 
     def evaluate_rmse(self):

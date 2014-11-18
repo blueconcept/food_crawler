@@ -3,12 +3,7 @@ import random
 import pandas as pd
 
 '''
-EDA: 
-
-1. Do different methods give more personalized results?  
-2. Do different methods score better in terms of RMSE?
-3. Does normalizing the ratings lead to better personalized results?
-4. Does normalizing the users lead to better personalized results?
+Gets a summary of individual recommendations for a model
 '''
 
 def get_user_rec(m, user_list, mongo):

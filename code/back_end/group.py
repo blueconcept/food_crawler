@@ -5,7 +5,7 @@ class Group():
         
     def __init__(self, mongo_doc):
         '''
-        INPUT: MongoToPython
+        INPUT: Dictionary
         DESCRIPTION: Initializes Group and assigns various attributes
         OUTPUT: None
         '''

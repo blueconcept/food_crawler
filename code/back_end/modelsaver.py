@@ -3,12 +3,16 @@ from mongointerface import MongoInterface
 import pandas as pd 
 import graphlab as gl
 
+'''
+Functions for save the models, later moved to the backend
+'''
+
 fp = '../../data/'
 
 def save_cleaned_data():
     '''
     INPUT: None
-    DESCRIPTION: 
+    DESCRIPTION: Saves the business data
     OUTPUT: None
     '''
     df = get_business_data_cleaned()
@@ -21,7 +25,7 @@ def making_models(list_methods = ['item_similarity_recommender', 'factorization_
                     'ranking_factorization_recommender']):
     '''
     INPUT: None
-    DESCRIPTION: 
+    DESCRIPTION: Makes and saves the model (deprecated)
     OUTPUT: None
     '''
     model = Model()
@@ -33,7 +37,7 @@ def making_models(list_methods = ['item_similarity_recommender', 'factorization_
 def test_models():
     '''
     INPUT: None
-    DESCRIPTION: 
+    DESCRIPTION: Tests the model
     OUTPUT: None
     '''
     list_methods = ['factorization_recommender', 'factorization_recommender',

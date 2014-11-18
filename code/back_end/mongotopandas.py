@@ -20,9 +20,9 @@ class MongoToPython():
 
     def query_all(self, collection_name, dict_requirements=None):
         '''
-        INPUT: String, dict_requirements=String
-        DESCRIPTION: Generator for a Mongo Query
-        OUTPUT: Dictionary
+        INPUT: String, Dictionary
+        DESCRIPTION: Generator query
+        OUTPUT: Cursor 
         '''
         docs = self.db[collection_name]
         if dict_requirements == None:
@@ -32,9 +32,21 @@ class MongoToPython():
             for doc in docs.find(dict_requirements):
                 yield doc
 
+    def get_all(self, collection_name, dict_requirements=None):
+        '''
+        INPUT: String, Dictionary
+        DESCRIPTION: Cursor for a Mongo Query
+        OUTPUT: Dictionary
+        '''
+        docs = self.db[collection_name]
+        if dict_requirements == None:
+            return docs.find()
+        else:
+            return docs.find(dict_requirements)
+             
     def mongo_to_lists(self, collection_name, column_names, dict_requirements=None):
         '''
-        INPUT: String, List of Strings, dict_req=Dictionary
+        INPUT: String, List of Strings, Dictionary
         DESCRIPTION: Takes queries and converts to a combined list or list
         OUTPUT: List of Lists
         '''
@@ -50,7 +62,7 @@ class MongoToPython():
 
     def mongo_to_df(self, collection_name, column_names, dict_requirements=None):
         '''
-        INPUT: String, List of Strings, dict_req=Dictionary
+        INPUT: String, List of Strings, Dictionary
         DESCRIPTION: Like mongo_to_lists but returns a dataframe
         OUTPUT: pandas.DataFrame
         '''

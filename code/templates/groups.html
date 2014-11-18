@@ -1,12 +1,59 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+  <script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
+  <script type=text/javascript>
+    $(function() {
+
+      $('#create_group').bind('click', function() {
+        $.getJSON($SCRIPT_ROOT + '/create_group', {
+         group_name: $('input[name="group_name"]').val()
+        }, function(data) {
+              switch(data.result) {
+                case -1:
+                  //duplicate group
+                  alert("You already have a group by that name.");
+                  break;
+                case 0:
+                  //blank group
+                  alert("Please use a different name.");
+                  break;
+                case 1:
+                  //create group
+                  alert("Group created!");
+                  console.log(data.group_id)
+                  var string = '<tr><td><form method="post" action="/group_up"><button name="group_up" id="group_up" class="btn btn-info" type="submit" type="submit" value="' + data.group_id 
+                  + '" >Group Up</button> </form></td><td>' + data.group_name + '</td></tr>';
+                  $("#lead_group_table").append(string);
+                  break;
+                }
+                return false;
+          });
+        });
+
+    });
+  
+  </script>
+
   <style>
 
   @import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
   @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+  
   .list-group {
     margin: 1%;
   }
@@ -44,22 +91,36 @@
   #lead_group{
     margin: 1%;
     float: left;
-    width: 48%;
+    width: 35%;
   }
 
   #member_group{
     margin: 1%;
-    float: right;
-    width: 48%;
+    float: left;
+    width: 35%;
   }
 
   .button-collection{
- 
-    
     margin-left: 1%;
   }
 
+  .input-group{
+    margin-left: 1%;
+    width: 50%;
+  }
+
+
+
+  #group_text {
+    float: left;
+    width: 50%;
+    margin-right: 1%;
+  }
+
+
+
   </style>
+
 </head>
 <body>
   <nav class="navbar navbar-inverse" role="navigation">
@@ -76,98 +137,134 @@
           <li class="nav-list-item"><a href="groups">Groups</a></li>
           <li class="nav-list-item"><a href="friends">Friends</a></li>
           <li class="nav-list-item"><a href="reviews">Reviews</a></li>
-          <li class="nav-list-item"><a href="#">Invites</a></li>
+
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_friends">
+        <div class="form-group">
+        <input name="friend-query" type="text" class="form-control" placeholder="Find Friends">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_businesses">
+        <div class="form-group">
+        <input name="business-query" type="text" class="form-control" placeholder="Find Businesses">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+      
         </ul>
         <ul class="nav navbar-nav navbar-right">
-          <li class="nav-list-item"><a href="#">Log Out</a></li>
+          <li class="nav-list-item"><a href="/">Log Out</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->
     </div>
   </nav>
 
-  <div class="button-collection">
-        <button class="btn btn-info" type="button">
-          Create Group
-        </button>
-</div>
-
+        <div class="input-group">
+          <input type="text" placeholder="Group Name" class="form-control" name='group_name' id="group_text"></input>
+          <button class="btn btn-info"  id='create_group'>Create Group</button>
+        </div>
   
   <div class="panel panel-primary" id="lead_group">
-  <div class="panel-heading">Your Groups</div>
-  <!-- Table -->
-  <table class="table" id="lead_group">
+  <div class="panel-heading">My Groups</div>
+  <table class="table" id="lead_group_table">
+
+    {% for group in my_groups %}
     <tr>
-      <td>Zipfian</td>
-      <td>Logan, Dan, Paul, Zack, Nhan</td> 
       <td>
-        <button class="btn btn-info" type="button">
-          Group Options
-        </button>
+        <form method="post" action="/group_up">
+          <button name='group_up' id='group_up' class="btn btn-info" type="submit" value="{{group.group_id}}">
+              Group Up
+          </button>
+        </form>
+      </td>
+
+
+      <td>{{group.name}}</td>
+      <td>{% for members in group.members %}
+            {{ members }}
+          {% endfor %}
       </td>
     </tr>
-    <tr>
-      <td>Zipfian</td>
-      <td>Logan, Dan, Paul, Zack, Nhan</td> 
-      <td>
-        <button class="btn btn-info" type="button">
-          Group Options
-        </button>
-      </td>
-    </tr>
-      <tr>
-      <td>Group Name</td>
-      <td>Members here</td> 
-      <td>
-        <button class="btn btn-info" type="button">
-          New Group
-        </button>
-      </td>
-    </tr>
+    {% endfor %}
+
   </table>
 </div>
 
 
 <div class="panel panel-primary" id="member_group">
-  <div class="panel-heading">Your Groups</div>
+  <div class="panel-heading">Other Groups</div>
   <!-- Table -->
   <table class="table" id="lead_group">
+    
+
+    {% for group in others_groups %}
+    <tr id="{{'row'+ group.group_id}}">
+      <td>
+        <form method="post" action="/group_up_member">
+          <button class="btn btn-info" type="submit" name="grouping-up" value="{{group.group_id}}">
+            Group Up
+          </button>
+        </form>
+      </td>
+      
+      <td>{{group.leaders_id}}</td>
+      <td>{{group.name}}</td>
+      <td>
+          {% for members in group.members %}
+            {{members}}
+          {% endfor %}
+      </td>
+
+        <td>
+          <form method="post" action="/member_leave_group">
+            <button name="leave-group" type="submit" id="{{group.group_id}}" class="btn btn-danger" value="{{group.group_id}}">
+              Leave Group
+            </button>
+          </form>
+
+          <script type=text/javascript>
+            $(function() {
+              $("#{{group.group_id}}").bind('click', function() {
+                group_id = "{{ group.group_id }}";
+                console.log(group_id);
+                $.getJSON($SCRIPT_ROOT + "/member_leave_group", {
+                  group_id: group_id
+                }, function(data) {
+                  $('#row'+data.group_id).remove();
+                });
+              });
+            });
+            </script>
+          </td>
+    </tr>
+    {% endfor %}
+
+    {% for group in inviting_groups%}
     <tr>
-            <td>
-        <button class="btn btn-info" type="button">
-          Meet
-        </button>
-      </td>
-      <td>Zipfian</td>
-      <td>Logan, Dan, Paul, Zack, Nhan</td> 
+        <td>
+           <form method="post" action="/join_group">
+          <button class="btn btn-info" type="submit" name="join-group" value="{{ group.group_id }}">
+            Join Group
+          </button>
+          </form>
+        </td>
+      <td>{{group.name}}</td>
       <td>
-        <button class="btn btn-info" type="button">
-          Group Options
-        </button>
+        {% for members in group.members %}
+          {{members}}
+        {% endfor %}
       </td>
+    
+    <form method="post" action="/decline_group">
+      <td name="decline-leaders-id" value="{{ group.leaders_id }}" type="text">
+          <button class="btn btn-danger" type="submit" name="decline-group" value="{{ group.group_id }}">
+            Decline Group
+          </button>
+      </td>
+    </form>
     </tr>
-    <tr>
-            <td>
-        <button class="btn btn-info" type="button">
-          Meet
-        </button>
-      </td>
-      <td>Zipfian</td>
-      <td>Logan, Dan, Paul, Zack, Nhan</td> 
-      <td>
-        <button class="btn btn-info" type="button">
-          Group Options
-        </button>
-      </td>
-    </tr>
-      <tr>
-      <td>Group Name</td>
-      <td>Members here</td> 
-      <td>
-        <button class="btn btn-info" type="button">
-          New Group
-        </button>
-      </td>
-    </tr>
+    {% endfor %}
   </table>
 </div>
 

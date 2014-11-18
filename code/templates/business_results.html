@@ -3,6 +3,12 @@
 <head>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
   <style>
 
   @import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
@@ -41,13 +47,13 @@
     font-size: 30px;
   }
 
-  #member_group{
-    margin: 1%;
-    width: 200px;
-    float: left;
+  .item-info{
+  	margin: 1%;
   }
 
-
+  .hidden{
+    visibility: hidden;
+  }
 
   </style>
 </head>
@@ -68,6 +74,7 @@
           <li class="nav-list-item"><a href="reviews">Reviews</a></li>
 
         <form class="navbar-form navbar-left" role="search" method="post" action="/find_friends">
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_friends">
         <div class="form-group">
         <input name="friend-query" type="text" class="form-control" placeholder="Find Friends">
         </div>
@@ -80,7 +87,7 @@
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
         </form>
-
+        
         </ul>
         <ul class="nav navbar-nav navbar-right">
           <li class="nav-list-item"><a href="/">Log Out</a></li>
@@ -89,62 +96,27 @@
     </div>
   </nav>
 
-<div class="panel panel-primary" id="member_group">
-<div class="panel-heading">Friends</div>
-<div cass="panel-body">
-<table class="table">
-{% for friend in friends %}
-<tr>
-  <td>
-    {{ friend.name }}
-  </td>
-</tr>
-{% endfor %}
-</table>
-</div>
-</div>
-
-<div class="panel panel-primary" id="member_group">
-<div class="panel-heading">Incoming Invitations</div>
-<div cass="panel-body">
-<table class="table">
-{% for invite in incoming_invites %}
-<tr>
-  <td>
-    {{ invite.name }}
-  </td>
-  <td>
-    <form method='post' action='/accept_invitation' >
-      <button class='btn btn-info'name="accept" type="submit" value="{{invite.invitation_id}}" >Accept</button>
-    </form>
-  </td>
-  <td>
-    <form method='post' action='/decline_invitation' >
-      <button class='btn btn-danger'name="decline" type="submit" value="{{invite.invitation_id}}" >Decline</button>
-    </form>
-  </td>
-</tr>
-{% endfor %}
-</table>
-</div>
-</div>
-
-<div class="panel panel-primary" id="member_group">
-<div class="panel-heading">Outgoing Invitations</div>
-<div cass="panel-body">
-<table class="table">
-{% for invite in outgoing_invites %}
-<tr>
-  <td>
-    {{ invite.name }}
-  </td>
-</tr>
-{% endfor %}
-</table>
-</div>
-</div>
-
-
+  <div class="list-group">
+    <a class="list-group-item default">
+      <h4 class="list-group-item-heading">Search Results</h4>
+    </a>
+    {% for bus in businesses %}
+      <a class="list-group-item">
+        <h4 href={{ bus.yelp}} class="list-group-item-heading">{{bus.name}}, Reviewed to be {{bus.stars}} Stars</h4>
+        <p class="list-group-item-text">{{ bus.address}}</p>
+        <p class="list-group-item-text" id='categories'>{{', '.join(bus.categories)}}</p>
+        <form method='post' action='/give_rating'>
+          <div class="btn-group" role="group" aria-label="">
+            <input class='hidden' type="text" value="{{bus.business_id}}" name="business_id" visibility='hidden'></input>
+            <button name='rate' type="submit" class="btn btn-default" value='1'>1</button>
+            <button name='rate' type="submit" class="btn btn-default" value='2'>2</button>
+            <button name='rate' type="submit" class="btn btn-default" value='3'>3</button>
+            <button name='rate' type="submit" class="btn btn-default" value='4'>4</button>
+            <button name='rate' type="submit" class="btn btn-default" value='5'>5</button>
+          </div>
+        </form>
+      </a>
+    {% endfor %}
+  </div>
 
 </body>
-</html>

@@ -5,7 +5,7 @@ class Business():
     
     def __init__(self, mongo_doc):
         '''
-        INPUT: MongoToPython
+        INPUT: Dictionary
         DESCRIPTION: Initializes Business and assigns various attributes
         OUTPUT: None
         '''

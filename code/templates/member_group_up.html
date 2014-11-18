@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+  <script>window.jQuery || document.write('<script src="{{
+  url_for('static', filename='jquery.js') }}">\x3C/script>')</script>
+
+  <script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  </script>
+
+</script>
+
+  <style>
+
+  @import url(http://fonts.googleapis.com/css?family=Exo:100,200,400);
+  @import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300);
+  
+  .list-group {
+    margin: 1%;
+  }
+
+  .Logo {
+    color: purple;
+    font-size: 140%;
+  }
+
+  .span-div{
+    margin-left:  33%;
+  }
+
+  li{
+    font-size: 140%;
+  }
+
+  .header div{
+    float: left;
+    color: #fff;
+    font-family: 'Exo', sans-serif; 
+    font-size: 35px;
+    font-weight: 200;
+  }
+
+  .header div span{
+    color: #5379fa !important;
+  }
+
+  .nav-list-item a{
+    font-family: 'Exo', sans-serif;
+    font-size: 30px;
+  }
+
+  #lead_group{
+    margin: 1%;
+    float: left;
+    width: 48%;
+  }
+
+  #member_group{
+    margin: 1%;
+    float: right;
+    width: 48%;
+  }
+
+  .button-collection{
+    margin-left: 1%;
+  }
+
+  .input-group{
+    margin-left: 1%;
+    width: 50%;
+  }
+
+  #group_text {
+    float: left;
+    width: 50%;
+    margin-right: 1%;
+  }
+
+  #recommendations{
+  	float: left;
+  	margin-right: 47;
+    margin: 1%;
+  }
+
+  #friends {
+  	margin: 1%;
+  	float: center;
+  	margin-left: 650px;
+  	margin-right: 50%;
+    margin-top: 2.1%;
+    height: 408px;
+  }
+
+
+  #disband_group {
+  	margin-left: 1%;
+
+  }
+
+</style>
+
+</head>
+<body>
+  <nav class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="/dashboard">
+          <div class="header">
+      <div>Food<span>Crawler</span></div>
+    </div>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="nav-list-item"><a href="groups">Groups</a></li>
+          <li class="nav-list-item"><a href="friends">Friends</a></li>
+          <li class="nav-list-item"><a href="reviews">Reviews</a></li>
+
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_friends">
+        <div class="form-group">
+        <input name="friend-query" type="text" class="form-control" placeholder="Find Friends">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+
+        <form class="navbar-form navbar-left" role="search" method="post" action="/find_businesses">
+        <div class="form-group">
+        <input name="business-query" type="text" class="form-control" placeholder="Find Businesses">
+        </div>
+        <button type="submit" class="btn btn-default">Submit</button>
+        </form>
+   
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li class="nav-list-item"><a href="/">Log Out</a></li>
+        </ul>
+      </div><!-- /.navbar-collapse -->
+    </div>
+  </nav>
+
+ 	<div class="panel panel-primary" id="recommendations">
+	  <div class="panel-heading">
+	    Top Recommended Group Restaurants</h4>
+	  </div>
+
+		{% for bus in group_businesses %}
+		  <a href={{ bus.yelp}} class="list-group-item">
+		    <h4 class="list-group-item-heading">{{bus.name}}, {{bus.stars}} Stars</h4>
+		    <p class="list-group-item-text">{{ bus.address}}</p>
+		    <p class="list-group-item-text" id='categories'>{{', '.join(bus.categories)}}</p>
+		  </a>
+		{% endfor %}
+	</div>
+
+	<div class="panel panel-primary" id="recommendations">
+	  <div class="panel-heading">Group Members</div>
+	
+	  	<div id="members">
+	    {% for member in members %}
+	    <a class="list-group-item">
+	    	<h4 class="list-group-item-heading" id={{ "name"+member.user_id}}>
+	    		{{ member.name }}
+	    	</h4>
+	    	</a>
+
+
+	    {% endfor %}
+      </div>
+	   </div>
+	 
+
+	  <div class="panel panel-warning" id="recommendations" name="invites">
+	  	<div class="panel-heading">Pending Invites</div>
+	
+	    <div id="pending">
+		{% for user in invited %}
+			<a class="list-group-item">
+        <h4 class="list-group-item-heading">
+		    {{  user.name }}
+        </h4>
+			</a>
+		{% endfor %}
+		</table>
+		</div>
+	</div>
+
+</body>

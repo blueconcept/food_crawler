@@ -2,6 +2,12 @@ from mongotopandas import MongoToPython
 import graphlab as gl
 import pandas as pd
 
+'''
+The purpose of this code was to explore if the other features would improve the models
+This meant going through the data on MongoDB and extracting the features into a clean df.
+The data was found to be very sparse and given domain knowledge only a few appeared to be useful.
+'''
+
 def remove_dictionaries(all_df):
     '''
     INPUT: DataFrame
